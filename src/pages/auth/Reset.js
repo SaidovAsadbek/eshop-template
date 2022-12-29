@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Card from "../../components/Card/Card";
 import styles from "./auth.module.scss";
 import resetImg from "../../assets/forgot.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 // Messages
 import { ToastContainer, toast } from "react-toastify";
@@ -19,6 +19,8 @@ const Reset = () => {
     const [email, setEmail] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    const navigate = useNavigate();
+
     const resetPassword = (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -29,6 +31,7 @@ const Reset = () => {
                 toast.success(
                     "Check your email for the password reset link..."
                 );
+                navigate("/login");
             })
             .catch((error) => {
                 setIsLoading(false);
