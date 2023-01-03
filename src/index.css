@@ -236,6 +236,10 @@ p {
   margin-bottom: 1rem;
 }
 
+.--mt {
+  margin-top: 1rem;
+}
+
 .--my {
   margin: 1rem 0;
 }

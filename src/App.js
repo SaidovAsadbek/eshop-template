@@ -3,7 +3,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // all imported components and pages
 import { Header, Footer } from "./components";
-import { Home, Contact, Login, Register, Reset, OrderHistory } from "./pages";
+import {
+    Home,
+    Contact,
+    Login,
+    Register,
+    Reset,
+    OrderHistory,
+    Admin,
+} from "./pages";
+import AdminOnlyRoute from "./components/adminOnlyRoute/AdminOnlyRoute";
 
 function App() {
     return (
@@ -20,6 +29,15 @@ function App() {
                         exact
                         path="/order-history"
                         element={<OrderHistory />}
+                    />
+                    <Route
+                        exact
+                        path="/admin/*"
+                        element={
+                            <AdminOnlyRoute>
+                                <Admin />
+                            </AdminOnlyRoute>
+                        }
                     />
                 </Routes>
                 <Footer />

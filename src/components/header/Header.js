@@ -20,6 +20,7 @@ import {
 } from "../../redux/slice/authSlice";
 
 import ShowOnLogin, { ShowOnLogout } from "../hiddenLink/hiddenLink";
+import { AdminOnlyLink } from "../adminOnlyRoute/AdminOnlyRoute";
 
 const logo = (
     <div className={styles.logo}>
@@ -112,6 +113,11 @@ const Header = () => {
                             <li className={styles["logo-mobile"]}>
                                 {logo}
                                 <FaTimes size={22} color="#fff" />
+                            </li>
+                            <li>
+                                <AdminOnlyLink>
+                                    <NavLink to="/admin/home">Admin</NavLink>
+                                </AdminOnlyLink>
                             </li>
                             <li>
                                 <NavLink className={activeLink} to="/">
