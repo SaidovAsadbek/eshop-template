@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 import styles from "./ViewProduct.module.scss";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db } from "../../../firebase/config";
+import {
+    collection,
+    deleteDoc,
+    doc,
+    onSnapshot,
+    orderBy,
+    query,
+} from "firebase/firestore";
+import { db, storage } from "../../../firebase/config";
 import { toast } from "react-toastify";
 import { NavLink } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import Loader from "../../Loader/Loader";
+import { deleteObject, ref } from "firebase/storage";
+import Notiflix from "notiflix";
 
 const ViewProduct = () => {
     const [products, setProducts] = useState([]);
@@ -34,6 +43,39 @@ const ViewProduct = () => {
             });
         } catch (error) {
             setIsLoading(false);
+            toast.error(error.message);
+        }
+    };
+
+    const confirmDelete = (id, imageUrl) => {
+        Notiflix.Confirm.show(
+            "Delete Product",
+            "You are about to delete this product",
+            "Delete",
+            "Cancel",
+            function okCb() {
+                deleteProduct(id, imageUrl);
+            },
+            function cancelCb() {
+                console.log("Cancelled");
+            },
+            {
+                width: "320px",
+                borderRadius: "8px",
+                cssAnimationStyle: "zoom",
+                // etc...
+            }
+        );
+    };
+
+    const deleteProduct = async (id, imageUrl) => {
+        try {
+            await deleteDoc(doc(db, "products", id));
+
+            const storageRef = ref(storage, imageUrl);
+            await deleteObject(storageRef);
+            toast.success("Product deleted Successfully");
+        } catch (error) {
             toast.error(error.message);
         }
     };
@@ -90,7 +132,13 @@ const ViewProduct = () => {
                                                 />
                                             </NavLink>
                                             &nbsp;
-                                            <FaTrashAlt size={18} color="red" />
+                                            <FaTrashAlt
+                                                onClick={() =>
+                                                    confirmDelete(id, imageUrl)
+                                                }
+                                                size={18}
+                                                color="red"
+                                            />
                                         </td>
                                     </tr>
                                 );
